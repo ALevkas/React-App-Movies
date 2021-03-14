@@ -1,55 +1,47 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Movies } from '../components/Movies/Movies';
 import { Preloader } from '../components/Preloader/Preloader';
 import { Search } from '../components/Search/Search';
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
-class Main extends React.Component {
-    state = {
-        movies: [],
-        loading: true,
-        errorMessage: '',
-    };
+const Main = () => {
+    const [movies, setMovies] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    getMovie = (nameMovie = 'Matrix', filter = '') => {
-        this.setState({ loading: true });
+    const getMovie = (nameMovie = 'Matrix', filter = '') => {
+        setLoading(true);
         fetch(
             `https://www.omdbapi.com/?s=${nameMovie}&type=${filter}&apikey=${API_KEY}`
         )
             .then((response) => response.json())
             .then((data) => {
                 if (data.totalResults > 0) {
-                    this.setState({ movies: data.Search, loading: false });
+                    setMovies(data.Search);
+                    setLoading(false);
                 } else {
-                    this.setState({
-                        movies: [],
-                        loading: false,
-                        errorMessage: data.Error,
-                    });
+                    setMovies([]);
+                    setLoading(false);
+                    setErrorMessage(data.Error);
                 }
             });
     };
 
-    componentDidMount() {
-        this.getMovie();
-    }
+    useEffect(() => {
+        getMovie();
+    }, []);
 
-    render() {
-        return (
-            <main className='container content'>
-                <Search getMovie={this.getMovie} />
-                {this.state.loading ? (
-                    <Preloader />
-                ) : (
-                    <Movies
-                        movies={this.state.movies}
-                        errorMessage={this.state.errorMessage}
-                    />
-                )}
-            </main>
-        );
-    }
-}
+    return (
+        <main className='container content'>
+            <Search getMovie={getMovie} />
+            {loading ? (
+                <Preloader />
+            ) : (
+                <Movies movies={movies} errorMessage={errorMessage} />
+            )}
+        </main>
+    );
+};
 
 export { Main };

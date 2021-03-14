@@ -1,95 +1,88 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-class Search extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+const Search = (props) => {
+    const { getMovie = Function.prototype } = props;
+    const [searchValue, setSearchValue] = useState('');
+    const [filterType, setFilterType] = useState('');
 
-    state = {
-        searchValue: '',
-        filterValue: '',
+    const changeSearchValue = (event) => {
+        setSearchValue(event.target.value);
     };
 
-    changeSearchValue = (event) => {
-        const movieName = event.target.value;
-        this.setState({ searchValue: movieName });
-    };
-
-    findMovie = (event) => {
+    const findMovie = (event) => {
         if (event.keyCode === 13) {
-            this.props.getMovie(this.state.searchValue, this.state.filterValue);
+            getMovie(searchValue, filterType);
         }
     };
 
-    filterChange = (event) => {
-        this.setState(
-            () => ({ filterValue: event.target.dataset.type }),
-            () => {
-                this.props.getMovie(
-                    this.state.searchValue,
-                    this.state.filterValue
-                );
-            }
-        );
+    const filterChange = (event) => {
+        setFilterType(event.target.dataset.type);
+        getMovie(searchValue, event.target.dataset.type);
     };
 
-    render() {
-        return (
-            <div className='row'>
-                <div className='input-field'>
-                    <input
-                        placeholder='Input name movie'
-                        type='text'
-                        className='validate'
-                        value={this.state.searchValue}
-                        onChange={this.changeSearchValue}
-                        onKeyDown={this.findMovie}
-                    />
-                </div>
-                <div className='filters'>
-                    <p>
-                        <label>
-                            <input
-                                className='with-gap'
-                                name='filterValue'
-                                type='radio'
-                                data-type=''
-                                onChange={this.filterChange}
-                                checked={this.state.filterValue === ''}
-                            />
-                            <span>All</span>
-                        </label>
-                    </p>
-                    <p>
-                        <label>
-                            <input
-                                className='with-gap'
-                                name='filterValue'
-                                type='radio'
-                                data-type='movie'
-                                onChange={this.filterChange}
-                                checked={this.state.filterValue === 'movie'}
-                            />
-                            <span>Movies only</span>
-                        </label>
-                    </p>
-                    <p>
-                        <label>
-                            <input
-                                className='with-gap'
-                                name='filterValue'
-                                type='radio'
-                                data-type='series'
-                                onChange={this.filterChange}
-                                checked={this.state.filterValue === 'series'}
-                            />
-                            <span>Series only</span>
-                        </label>
-                    </p>
-                </div>
+    return (
+        <div className='row'>
+            <div className='input-field search'>
+                <input
+                    placeholder='Input name movie'
+                    type='text'
+                    className='validate'
+                    value={searchValue}
+                    onChange={changeSearchValue}
+                    onKeyDown={findMovie}
+                />
+                <button
+                    class='waves-effect waves-light btn'
+                    onClick={() => {
+                        getMovie(searchValue, filterType);
+                    }}
+                >
+                    Search
+                </button>
             </div>
-        );
-    }
-}
+            <div className='filters'>
+                <p>
+                    <label>
+                        <input
+                            className='with-gap'
+                            name='filterValue'
+                            type='radio'
+                            data-type=''
+                            onChange={filterChange}
+                            checked={filterType === ''}
+                        />
+                        <span>All</span>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <input
+                            className='with-gap'
+                            name='filterValue'
+                            type='radio'
+                            data-type='movie'
+                            onChange={filterChange}
+                            checked={filterType === 'movie'}
+                        />
+                        <span>Movies only</span>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <input
+                            className='with-gap'
+                            name='filterValue'
+                            type='radio'
+                            data-type='series'
+                            onChange={filterChange}
+                            checked={filterType === 'series'}
+                        />
+                        <span>Series only</span>
+                    </label>
+                </p>
+            </div>
+        </div>
+    );
+};
 
 export { Search };
