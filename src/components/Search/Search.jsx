@@ -32,7 +32,7 @@ const Search = (props) => {
                     onKeyDown={findMovie}
                 />
                 <button
-                    class='waves-effect waves-light btn'
+                    className='btn green darken-2'
                     onClick={() => {
                         getMovie(searchValue, filterType);
                     }}
@@ -57,7 +57,7 @@ const Search = (props) => {
                 <p>
                     <label>
                         <input
-                            className='with-gap'
+                            className='with-gap '
                             name='filterValue'
                             type='radio'
                             data-type='movie'
