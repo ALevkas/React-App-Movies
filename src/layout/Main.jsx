@@ -3,42 +3,53 @@ import { Movies } from '../components/Movies/Movies';
 import { Preloader } from '../components/Preloader/Preloader';
 import { Search } from '../components/Search/Search';
 
-class Main extends React.Component {
+const API_KEY = process.env.REACT_APP_API_KEY;
 
+class Main extends React.Component {
     state = {
         movies: [],
-    }
+        loading: true,
+        errorMessage: '',
+    };
 
-    getMovie = (nameMovie) => {
-        fetch(`http://www.omdbapi.com/?s=${nameMovie}&apikey=24b3a9f2`)
-            .then(response => response.json())
+    getMovie = (nameMovie = 'Matrix', filter = '') => {
+        this.setState({ loading: true });
+        fetch(
+            `https://www.omdbapi.com/?s=${nameMovie}&type=${filter}&apikey=${API_KEY}`
+        )
+            .then((response) => response.json())
             .then((data) => {
                 if (data.totalResults > 0) {
-                    this.setState({ movies: data.Search })
+                    this.setState({ movies: data.Search, loading: false });
                 } else {
-                    this.setState({ movies: []})
+                    this.setState({
+                        movies: [],
+                        loading: false,
+                        errorMessage: data.Error,
+                    });
                 }
             });
-    }
+    };
 
     componentDidMount() {
-        fetch('http://www.omdbapi.com/?s=Matrix&apikey=24b3a9f2')
-            .then(response => response.json())
-            .then(data => this.setState({ movies: data.Search }));
+        this.getMovie();
     }
 
     render() {
-
-        return <main className="container content">
-            <Search getMovie={this.getMovie} />
-            {
-                this.state.movies?.length ? (
-                    <Movies movies={this.state.movies} />
-                ) : <Preloader />
-
-            }
-        </main>
+        return (
+            <main className='container content'>
+                <Search getMovie={this.getMovie} />
+                {this.state.loading ? (
+                    <Preloader />
+                ) : (
+                    <Movies
+                        movies={this.state.movies}
+                        errorMessage={this.state.errorMessage}
+                    />
+                )}
+            </main>
+        );
     }
 }
 
-export { Main }
+export { Main };
