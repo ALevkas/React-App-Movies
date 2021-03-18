@@ -10,7 +10,7 @@ const Main = () => {
     const [loading, setLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const getMovie = (nameMovie = 'Matrix', filter = '') => {
+    const getMovie = (nameMovie = 'Wars', filter = '') => {
         setLoading(true);
         fetch(
             `https://www.omdbapi.com/?s=${nameMovie}&type=${filter}&apikey=${API_KEY}`
