@@ -11,6 +11,7 @@ const Main = () => {
     const [errorMessage, setErrorMessage] = useState('');
 
     const getMovie = (nameMovie = 'Wars', filter = '') => {
+        nameMovie = nameMovie.trim() ? nameMovie.trim() : 'Wars';
         setLoading(true);
         fetch(
             `https://www.omdbapi.com/?s=${nameMovie}&type=${filter}&apikey=${API_KEY}`

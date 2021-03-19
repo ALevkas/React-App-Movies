@@ -6,9 +6,14 @@ export const Movie = (props) => {
                     <img
                         className='activator film__img'
                         src={`https://via.placeholder.com/300x400?text=${props.Title}`}
+                        alt='Poster Film'
                     />
                 ) : (
-                    <img className='activator film__img' src={props.Poster} />
+                    <img
+                        className='activator film__img'
+                        src={props.Poster}
+                        alt='Poster Film'
+                    />
                 )}
             </div>
             <div className='card-content movie-content'>
