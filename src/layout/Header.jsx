@@ -3,10 +3,10 @@ function Header() {
         <nav className='green darken-1'>
             <div className='nav-wrapper'>
                 <a
-                    href='https://allevchenko.ru/React-App-Movies/'
+                    href='https://allevchenko.ru/react-app-movies/'
                     className='brand-logo'
                 >
-                    Movies finder
+                    React App Movies
                 </a>
                 <ul id='nav-mobile' className='right hide-on-med-and-down'>
                     <li>
